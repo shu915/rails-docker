@@ -10,3 +10,5 @@ yarn
 WORKDIR /docker-ruby
 COPY Gemfile Gemfile.lock /docker-ruby/
 RUN bundle install
+COPY . /docker-ruby
+
