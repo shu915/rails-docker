@@ -73,9 +73,10 @@ services:
       - "POSTGRES_PASSWORD=postgres"
 ```
 versionで3に指定します。
-
+```
 volumes:
   docker-ruby-db:
+```
 これで、docker-ruby-dbというボリュームを確保します。
 
 services:の中にwebとdbを作ります。
@@ -109,7 +110,6 @@ volumes:
 ```
 これで手元のフォルダとコンテナ内の作業フォルダを同期させます。
 
-```
 
 ```
 tty: true
@@ -133,5 +133,35 @@ environment:
 この環境変数はコンテナの中に渡されます。
 
 ### db:の中に書いてあるもの
+```
+  image: postgres:12
+```
+自分でDockerfileでビルドせずに、イメージを取ってきています。
+postgresの12を取ってきています。
 
+```
+  volumes:
+    - "docker-ruby-db:/var/lib/postgresql/data"
+```
+上の方で確保したボリュームに、コンテナ内のDBの保管場所を合わせることで、
+DBの中身を永続化できます。
+
+```
+  environment:
+  - "POSTGRES_PASSWORD=postgres"
+```
+DBの方のコンテナに渡す環境変数です。
+これはrootのパスワードですが、本番環境では別の渡し方をしたほうがいいです。
+
+## railsのconfig/database.ymlを編集する
+![ファイルを編集する](/ss02.png)
+```
+  host: db
+  user: postgres
+  port: 5432
+  password: <%= ENV.fetch("DATABASE_PASSWORD") %>
+```
+デフォルトにスクリーンショットのように4行を追記します。
+接続するDBとユーザー名とポート番号とパスワードを入れています
+パスワードはdocker-compose.ymlで入れたものをってきます。
 
