@@ -22,7 +22,7 @@ services:
       - db
 
   db:
-    image: postgres
+    image: postgres:18
     volumes:
       - "docker-ruby-db:/var/lib/postgresql/data"
     environment:
