@@ -163,5 +163,35 @@ DBの方のコンテナに渡す環境変数です。
 ```
 デフォルトにスクリーンショットのように4行を追記します。
 接続するDBとユーザー名とポート番号とパスワードを入れています
-パスワードはdocker-compose.ymlで入れたものをってきます。
+パスワードはdocker-compose.ymlで入れたものをとってきます。
 
+```
+docker-compose up -d
+```
+これでコンテナがたり上がります
+-dを入れると、デタッチモードになり、ターミナルを操作できます。
+
+## コンテナが起動した後の作業
+![Railsはすでに起動](/ss03.png)
+ブラウザからlocalhost:3000にアクセスするとエラーが出ますが
+この時点でRailsはすでに起動しています。
+
+ホストコンピューターからwebコンテナに入ります
+```
+docker-compose exec web bash
+```
+webコンテナのbashに入ってから以下のようにします
+```
+rails db:create
+```
+少し待ってから
+```
+rails db:migrate
+```
+これでDBが作成されて、RailsからDBの設定がされます。
+
+```
+docker-compose down
+docker-compose up -d
+```
+再起動したら、アプリが起動しました！
